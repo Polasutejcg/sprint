@@ -64,14 +64,32 @@ int main()
                                 //bill(headccd);
                                 sleep(1);
                                 break;
+                            case 3:
+                                printf("\n\t Car details are:\n");
+                                dispDD(headdd);
+                                printf("\n");
+                                sleep(1);
+                                break;
+                            case 4:
+                            case 5:
+                            case 6:
+                                printf("\n enter value 1/0:\n");
+                                scanf("%d",&ch);
+                                if(ch==1)
+                                        printf("\n Payment is done");
+                                else
+                                        printf("\n Not done");
                             case 0:
-                                exit(EXIT_SUCCESS);
+                                printf("\n\tReturning back to Main Menu\n");
+						        break;
+                               // exit(EXIT_SUCCESS);
                     
                             default:
                                 printf("Incorrect Choice:");
 
                         }
                     }
+                    ch = 0;
                     sleep(2);
                     break;
             case 4:
@@ -90,15 +108,29 @@ int main()
                         switch(ch)
                         {
                             case 1:
+                                updateDetails(headdd);
+                                sleep(1);
+                                break;
                                 //dispDD(headdd);
+                            case 2:
+                            case 3:
+                            case 4:
+                                checkBookedTrips(headccd);
+                                sleep(1);
+                                break;
+                            case 5:
+                                markCompleteTrips(headccd);
+                                sleep(1);
+                                break;
                             case 0:
-                                exit(EXIT_SUCCESS);
-                    
-                            default:
-                                printf("Incorrect Choice:");
+						        printf("\n\tReturning back to Main Menu\n");
+						        break;
+					        default:
+						        printf("\nEnter correct choice\n");
 
                         }
                     }
+                    ch = 0;
                     sleep(2);
                     break;
 

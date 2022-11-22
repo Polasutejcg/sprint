@@ -54,6 +54,7 @@ int writeDD(DD *);
 int writeCD(CD *);
 int writeccD(Customer_Car_Details *);
 void dispDD(DD *);
+void checkBookedTrips(Customer_Car_Details *);
 Customer_Car_Details* loadccD();
 Customer_Car_Details* addCustomerCarDetails(Customer_Car_Details *, int *);
 int tokenizeccd(Customer_Car_Details *, char *);
@@ -63,7 +64,8 @@ int tokenizeccd(Customer_Car_Details *, char *);
 //int updateCarDetails(DD *);
 void removeLeading(char *, char*);
 void removeTrailing(char *);
-
-int bill(Customer_Car_Details *);
+int updateDetails(DD *);
+int cap(Customer_Car_Details *);
+int markCompleteTrips(Customer_Car_Details *);
 
 #endif

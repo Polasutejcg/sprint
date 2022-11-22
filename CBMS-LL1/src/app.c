@@ -453,7 +453,7 @@ void dispDD(DD *dd)
         printf("\n\tphone number: ");
 		printf("%d",dd->_phonenum);
 		printf("\tGender (M/F/O): ");
-		printf("%c",dd->_gender);
+		printf("%c\n",dd->_gender);
 		dd = dd->next;
 	}
 }
@@ -501,8 +501,8 @@ Customer_Car_Details* addCustomerCarDetails(Customer_Car_Details *ccd, int *_id)
 	scanf("%d",&_status);
 	if(_status == 1){
 		printf("\n\tBooking succesfull");
-		bill(ccd);
-		scanf("%d",&_status);
+		cap(ccd);
+		//scanf("%d",&_status);
 	}
 	else{
 		printf("\n Booking cancelled");
@@ -621,38 +621,100 @@ int tokenizeccd(Customer_Car_Details *ccd, char *tmpBuff)
 	 //tokens[0];
     return 0;
 }
-/*
-int bill(Customer_Car_Details *ccd)
+
+
+int cap(Customer_Car_Details *ccd)
 {
-	int cost=0;
-	int price=0;
-     while(ccd != NULL){
+	//int cost=0;
+	//int price=0;
+	
+     //while(ccd != NULL){
 		printf("\n\tCapacity: ");
 		printf("%d",ccd->capacity);
-		printf("\n\tEnter cost: ");
+		/*printf("\n\tEnter cost: ");
 		//getchar();
 		scanf("%d",&cost);
 		price = (ccd->capacity) * cost;
-		printf("\n\tcost is %d",price);
-		break;//ccd = ccd->next;
-	 }
+		printf("\n\tcost is %d\n\t",price);
+		exit(EXIT_SUCCESS);*/
+		//ccd = ccd->next;
+	 //}break;
 	 return 0;
 }
-*/
 
-int bill(Customer_Car_Details *ccd)
+int updateDetails(DD *head)
 {
-	int cost=0;
-	int price=0;
-     while(ccd != NULL){
-		printf("\n\tCapacity: ");
-		printf("%d",ccd->capacity);
-		printf("\n\tEnter cost: ");
-		//getchar();
-		scanf("%d",&cost);
-		price = (ccd->capacity) * cost;
-		printf("\n\tcost is %d",price);
-		break;//ccd = ccd->next;
-	 }
-	 return 0;
+	//int _id;
+	DD _dd;
+	int flag = 0;
+	printf("\n Enter your id to update:");
+	getchar();
+	//scanf("%d",&newNode->_id);
+	scanf("%d",&_dd._id);
+	while(head != NULL)
+	{
+		if(head->_id == _dd._id)
+		{
+			//flag = 1;
+			printf("\n Enter name to update:");
+			getchar();
+			scanf("%[^\n]s",_dd._name);
+			//head->_name == _dd._name;
+			strcpy(head->_name,_dd._name);
+			//free(head);
+			writeDD(head);
+			//dispDD(head);
+			break;
+		}
+		head = head->next;
+	}
+	//writeDD(head);
+
+	if(flag == 1)
+		return 1;
+	return 0;
+}
+
+void checkBookedTrips(Customer_Car_Details *ccd)
+{
+       while(ccd != NULL){
+                printf("\n\tCapacity: ");
+                printf("%d",ccd->capacity);
+                printf("\tCustomer Name: ");
+                printf("%s",ccd->cust_name);
+                printf("\n\tpick up address: ");
+                printf("%s",ccd->pick);
+                printf("\tDrop off address: ");
+                printf("%s",ccd->drop);
+				printf("\tGender: ");
+                printf("%c",ccd->_gender);
+                ccd = ccd->next;
+      }
+	  
+}
+
+int markCompleteTrips(Customer_Car_Details *ccd)
+{
+  int choice;
+  int amt;
+  int amount;
+  printf("\n\t1.Trip Completed\n\t2.Exit\n\tchoice: ");
+  scanf("%d",&choice);
+  switch(choice)
+         {
+           case 1:
+		   		   //cap(ccd);
+                   printf("\nEnter the amount:");
+                   scanf("%d",&amt);
+				   amount=amt*cap(ccd);
+				   printf("%d",amount);
+                   printf("\n\tThe Trip is Completed\n");
+                   return amt; //bill
+                   break;
+           case 2:
+                   exit(0);
+           default:
+                    printf("INVALID CHOICE");
+		 }
+		 return 0;
 }
