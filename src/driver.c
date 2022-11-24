@@ -123,16 +123,24 @@ int findLRecDrv(DRIVER *head, char *lName, char *lPasswd)
 
 void dispDriver(DRIVER *head)
 {
+	DRIVER _dd;
+	printf("\n Enter your id for cab driver:");
+	getchar();
+	//scanf("%d",&newNode->_id);
+	scanf("%d",&_dd._id);
 	while(head != NULL)
 	{
-		printf("\n\t%d",head->_id);
-		printf("\n\t%d",head->phone);
-		printf("\n\t%s",head->name);
-		printf("\n\t%c",head->gender);
-		printf("\n\t%s",head->dName);
-		printf("\n\t%s",head->dPasswd);
-		printf("\n\t%s",head->CAR.carRegNo);
-		printf("\n\t%s",head->CAR.carModel);
+		if(head->_id == _dd._id)
+		{
+			printf("\n\t%d",head->_id);
+			printf("\n\t%d",head->phone);
+			printf("\n\t%s",head->name);
+			printf("\n\t%c",head->gender);
+			printf("\n\t%s",head->dName);
+			printf("\n\t%s",head->dPasswd);
+			printf("\n\t%s",head->CAR.carRegNo);
+			printf("\n\t%s",head->CAR.carModel);
+		}
 		head = head->next;
 	}
 }
@@ -172,7 +180,7 @@ int updateDDetails(DRIVER *head)
 					printf("\n Enter phone number to update:");
 					getchar();
 					scanf("%d",&_dd.phone);
-					head->phone ==_dd.phone;
+					head->phone = _dd.phone;
 					break;
 				case 3:
 					printf("\n Enter user name to update:");
@@ -211,4 +219,118 @@ int updateDDetails(DRIVER *head)
 	if(flag == 1)
 		return 1;
 	return 0;
+}
+
+
+int writeDriDetails(DRIVER* head)
+{
+	FILE *fp = NULL;
+
+	fp = fopen("./data/DRIVER.dat","w+");
+	if(fp == NULL)
+	{
+		perror("\n\tfopen() ");
+		return -1;
+	}
+	fseek(fp, 0L, SEEK_END);
+	if(head == NULL){
+		printf("\n\t No Records Present\n");
+		return 0;
+	}
+	while(head != NULL){
+		fprintf(fp,"%d, %s, %d, %c, %s, %s\n",head->_id,head->name,head->phone, head->gender, head->dName, head->dPasswd);
+		head = head->next;
+	}
+	fclose(fp);
+	return 0;
+}
+
+
+DRIVER* loadDriDetails()
+{
+	FILE *fp = NULL;
+	DRIVER *newNode = NULL;
+	DRIVER *head = NULL;
+	DRIVER *dri; 
+	int _fSize = 0;
+	char tmpBuff[256] = {'\0', };
+	
+	fp = fopen("./data/DRI.dat","r+");
+	if(fp == NULL)
+	{
+		perror("\n\tfopen() ");
+		return NULL;
+	}
+
+	fseek(fp, 0L, SEEK_SET);
+	fseek(fp, 0L, SEEK_END);
+	_fSize = ftell(fp);
+	if(_fSize == 0) /* No records */
+	{
+		head = NULL;
+	}
+	else
+	{
+		fseek(fp, 0L, SEEK_SET);
+		memset(tmpBuff,'\0', 256);
+		while(fgets(tmpBuff, 256, fp)){
+			
+			if(head == NULL) /* first record */
+			{
+				newNode = (DRIVER *)malloc(sizeof(DRIVER));
+				newNode->next = NULL;
+				head = newNode;
+				dri = newNode;
+				tokenizeDRIVER(newNode, tmpBuff);
+						
+			}
+			else /* rest of the records */
+			{
+				newNode = (DRIVER *)malloc(sizeof(DRIVER));
+				newNode->next = NULL;
+				dri->next = newNode;
+				tokenizeDRIVER(newNode, tmpBuff);
+				dri = dri->next;	
+			}
+			
+
+		}
+
+	}
+
+	fclose(fp);
+	// printf("\n\tHead : %u\nlast node: %u\n", head, pd);
+	return head;
+}
+
+
+int tokenizeDRIVER(DRIVER *dri, char *tmpBuff)
+{
+	char *tokens;
+	//int i, count;
+	//char *tmpBuff1;
+	tokens = strtok(tmpBuff, ",");
+	dri->_id = atoi(tokens);
+
+	tokens = strtok(NULL, ",");
+	removeLeading(tokens,dri->name);
+	tokens = strtok(tmpBuff, ",");
+	dri->phone = atoi(tokens);
+    tokens = strtok(NULL, ",");
+	dri->gender =  atoi(tokens);
+	tokens = strtok(NULL, ",");
+	removeLeading(tokens,dri->dName);
+	tokens = strtok(NULL, ",");
+	removeLeading(tokens,dri->dPasswd);
+	removeTrailing(dri->dPasswd);
+    
+	tokens = strtok(NULL, ",");
+	removeLeading(tokens,dri->CAR.carModel);
+	tokens = strtok(NULL, ",");
+	removeLeading(tokens,dri->CAR.carRegNo);
+	tokens = strtok(NULL, ",");
+	//cd->_gender = tokens[0];
+    return 0;
+
+	//dispPD(pd);
 }

@@ -114,14 +114,13 @@ int writeCustDetails(CUST* head)
 {
 	FILE *fp = NULL;
 
-	fp = fopen("CUST.dat","w+");
+	fp = fopen("./data/CUST.dat","w+");
 	if(fp == NULL)
 	{
 		perror("\n\tfopen() ");
 		return -1;
 	}
-
-	
+	fseek(fp, 0L, SEEK_END);
 	if(head == NULL){
 		printf("\n\t No Records Present\n");
 		return 0;
@@ -130,9 +129,8 @@ int writeCustDetails(CUST* head)
 		fprintf(fp,"%d, %d, %s, %c, %s, %s\n",head->_id,head->phone,head->name, head->gender, head->cName, head->cPasswd);
 		head = head->next;
 	}
-
 	fclose(fp);
-
+	return 0;
 }
 
 
@@ -145,7 +143,7 @@ CUST* loadCustDetails()
 	int _fSize = 0;
 	char tmpBuff[256] = {'\0', };
 	
-	fp = fopen("CUST.dat","r");
+	fp = fopen("CUST.dat","r+");
 	if(fp == NULL)
 	{
 		perror("\n\tfopen() ");
@@ -181,7 +179,7 @@ CUST* loadCustDetails()
 				newNode = (CUST *)malloc(sizeof(CUST));
 				newNode->next = NULL;
 				cust->next = newNode;
-				//tokenizeCUST(newNode, tmpBuff);
+				tokenizeCUST(newNode, tmpBuff);
 				cust = cust->next;	
 			}
 			
@@ -195,24 +193,30 @@ CUST* loadCustDetails()
 	return head;
 }
 
-/*
+
 int tokenizeCUST(CUST *cust, char *tmpBuff)
 {
 	char *tokens;
-	int i, count;
-	char *tmpBuff1;
-
+	//int i, count;
+	//char *tmpBuff1;
 	tokens = strtok(tmpBuff, ",");
-	pd->_id = atoi(tokens);
+	cust->_id = atoi(tokens);
 
 	tokens = strtok(NULL, ",");
-	removeLeading(tokens,pd->_name);
-	
+	removeLeading(tokens,cust->name);
+	tokens = strtok(tmpBuff, ",");
+	cust->phone = atoi(tokens);
+    tokens = strtok(NULL, ",");
+	cust->gender =  atoi(tokens);
 	tokens = strtok(NULL, ",");
-	removeLeading(tokens,tokens);
-	removeTrailing(tokens);
-	pd->_gender = tokens[0];
+	removeLeading(tokens,cust->cName);
+	tokens = strtok(NULL, ",");
+	removeLeading(tokens,cust->cPasswd);
+	removeTrailing(cust->cPasswd);
+    
+	tokens = strtok(NULL, ",");
+	//cd->_gender = tokens[0];
+    return 0;
 
 	//dispPD(pd);
 }
-*/

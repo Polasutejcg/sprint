@@ -26,4 +26,7 @@ int checkCab(TRIP *, DRIVER*, int);
 void printBook(TRIP*, CUST*, DRIVER*, int);
 void dispTrip(TRIP *);
 int markCompleteTrips(TRIP *);
+int writeTripDetails(TRIP* );
+TRIP* loadTripDetails();
+int tokenizeTRIP(TRIP *, char *);
 #endif

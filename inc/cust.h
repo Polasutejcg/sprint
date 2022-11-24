@@ -23,5 +23,6 @@ void dispCust(CUST *);
 
 int writeCustDetails(CUST*);
 CUST* loadCustDetails();
+int tokenizeCUST(CUST *, char *);
 
 #endif

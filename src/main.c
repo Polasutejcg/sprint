@@ -9,8 +9,14 @@ int main()
 	int retVal = 0, flag=0;
 
 	CUST *hCust = NULL;
+	CUST *headC = NULL;
 	DRIVER *hDriver = NULL;
+	DRIVER *headD = NULL;
 	TRIP *hTrip = NULL;
+	TRIP *headT = NULL;
+	headC = loadCustDetails(hCust);/*loading driver details from DD.dat*/
+	headD = loadDriDetails(hDriver);/*loading Customer details from CD.dat*/
+    headT = loadTripDetails(hTrip);
 	while(1){
 		ch = mainMenu();
 		switch(ch)
@@ -22,11 +28,10 @@ int main()
 						switch(ch)
 						{
 							case 1:
-								hCust = signUpCust(hCust);
-
+								headC = signUpCust(headC);
 								break;
 							case 2:
-								retVal = signInCust(hCust);
+								retVal = signInCust(headC);
 								if(retVal == 1)
 								{
 									while(1){
@@ -34,21 +39,24 @@ int main()
 										switch(ch)
 										{
 											case 1:
-												hTrip = bookTrip(hTrip,&bid);
+												headT = bookTrip(headT,&bid);
+												writeTripDetails(headT);
 												printf("\n\tYour Booking is confirmed with following details\n");
-												printBook(hTrip, hCust,hDriver, bid);
+												printBook(headT, headC,headD, bid);
 												break;
 											case 2:
 												//checkDrv();
+												dispDriver(headD);
 												break;
 											case 3:
 												//checkCab();
 												//dispTrip(hTrip);
+												dispDriver(headD);
 												break;
 											case 4:
 												printf("\n\tEnter the Booking ID: ");
 												scanf("%d",&bid);
-												printBook(hTrip, hCust,hDriver, bid);
+												printBook(headT, headC,headD, bid);
 												break;
 											case 5:
 												flag = 1; 
@@ -69,7 +77,7 @@ int main()
 							case 3:
 								//dispCust(hCust);
 								/*printf("\n\tReturning Back to MainMenu");*/
-								writeCustDetails(hCust);
+								writeCustDetails(headC);
 								flag = 1;
 								break;
 							default:
@@ -87,11 +95,11 @@ int main()
 				switch(ch)
 				{
 					case 1:
-						hDriver = signUpDriver(hDriver);
-
+						headD = signUpDriver(headD);
+						writeDriDetails(headD);
 						break;
 					case 2:
-						retVal = signInDriver(hDriver);
+						retVal = signInDriver(headD);
 						//retVal = signInCust(hCust);
 								if(retVal == 1)
 								{
@@ -100,15 +108,15 @@ int main()
 										switch(ch)
 										{
 											case 1:
-												updateDDetails(hDriver);
-												dispDriver(hDriver);
+												updateDDetails(headD);
+												dispDriver(headD);
 												break;
 											case 2:
 												//checkDrv();
-												dispTrip(hTrip);
+												dispTrip(headT);
 												break;
 											case 3:
-												markCompleteTrips(hTrip);
+												markCompleteTrips(headT);
 												//checkCab();
 												break;
 											case 4:
@@ -128,7 +136,8 @@ int main()
 								}
 								break;
 					case 3:
-						dispDriver(hDriver);
+						dispDriver(headD);
+						writeDriDetails(headD);
 						printf("\n\tReturning Back to MainMenu");
 						break;
 					default:

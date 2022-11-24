@@ -8,5 +8,7 @@
 int mainMenu();
 int custMainMenu();
 int driverMenu();
+void removeLeading(char *, char *);
+void removeTrailing(char *);
 
 #endif

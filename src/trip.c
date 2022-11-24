@@ -120,7 +120,7 @@ void dispTrip(TRIP *head)
 			printf("\n\tStatus:%d",head->status);
 			printf("\n\tsrc :%s",head->src);
 			printf("\n\tDest :%s",head->dst);
-			printf("\n\tData :%s",head->tdate);
+			printf("\n\tDate :%s",head->tdate);
 			head = head->next;
 		}
 	}
@@ -139,7 +139,7 @@ int markCompleteTrips(TRIP *thead)
          case 1:
              printf("\n\tEnter the amount of your customer:");
              scanf("%d",&amt);
-             printf("\n\tEnter 1 for payment:");
+             printf("\n\tEnter 1 for Status:");
              scanf("%d",&a);
              if(thead->status == 0)
                  strcpy(tStatus, "Ongoing");
@@ -153,3 +153,115 @@ int markCompleteTrips(TRIP *thead)
      }
      return thead->status;
 }
+
+
+int writeTripDetails(TRIP* head)
+{
+	FILE *fp = NULL;
+
+	fp = fopen("./data/TRIP.dat","w+");
+	if(fp == NULL)
+	{
+		perror("\n\tfopen() ");
+		return -1;
+	}
+	fseek(fp, 0L, SEEK_END);
+	if(head == NULL){
+		printf("\n\t No Records Present\n");
+		return 0;
+	}
+	while(head != NULL){
+		fprintf(fp,"%d, %d, %d, %d, %s, %s, %s\n",head->_tid,head->_cid,head->_did,head->status,head->src,head->dst,head->tdate);
+		head = head->next;
+	}
+	fclose(fp);
+	return 0;
+}
+
+
+TRIP* loadTripDetails()
+{
+	FILE *fp = NULL;
+	TRIP *newNode = NULL;
+	TRIP *head = NULL;
+	TRIP *trip; 
+	int _fSize = 0;
+	char tmpBuff[256] = {'\0', };
+	
+	fp = fopen("./data/TRIP.dat","r+");
+	if(fp == NULL)
+	{
+		perror("\n\tfopen() ");
+		return NULL;
+	}
+
+	fseek(fp, 0L, SEEK_SET);
+	fseek(fp, 0L, SEEK_END);
+	_fSize = ftell(fp);
+	
+	if(_fSize == 0) /* No records */
+	{
+		head = NULL;
+	}
+	else
+	{
+		fseek(fp, 0L, SEEK_SET);
+		memset(tmpBuff,'\0', 256);
+		
+		while(fgets(tmpBuff, 256, fp)){
+			
+			if(head == NULL) /* first record */
+			{
+				newNode = (TRIP *)malloc(sizeof(TRIP));
+				newNode->next = NULL;
+				head = newNode;
+				trip = newNode;
+				tokenizeTRIP(newNode, tmpBuff);
+						
+			}
+			else /* rest of the records */
+			{
+				newNode = (TRIP *)malloc(sizeof(TRIP));
+				newNode->next = NULL;
+				trip->next = newNode;
+				tokenizeTRIP(newNode, tmpBuff);
+				trip = trip->next;	
+			}
+			
+
+		}
+
+	}
+
+	fclose(fp);
+	// printf("\n\tHead : %u\nlast node: %u\n", head, pd);
+	return head;
+}
+
+
+int tokenizeTRIP(TRIP *trip, char *tmpBuff)
+{
+	char *tokens;
+	//int i, count;
+	//char *tmpBuff1;
+	tokens = strtok(tmpBuff, ",");
+	trip->_tid = atoi(tokens);
+	tokens = strtok(tmpBuff, ",");
+	trip->_cid = atoi(tokens);
+	tokens = strtok(tmpBuff, ",");
+	trip->_did = atoi(tokens);
+	tokens = strtok(tmpBuff, ",");
+	trip->status = atoi(tokens);
+	tokens = strtok(NULL, ",");
+	removeLeading(tokens,trip->src);
+	tokens = strtok(NULL, ",");
+	removeLeading(tokens,trip->dst);
+	tokens = strtok(NULL, ",");
+	removeLeading(tokens,trip->tdate);
+	tokens = strtok(NULL, ",");
+	//cd->_gender = tokens[0];
+    return 0;
+
+	//dispPD(pd);
+}
+

@@ -41,3 +41,37 @@ int driverMenu()
 	scanf("%d",&ch);
 	return ch;
 }
+
+void removeLeading(char *str, char *str1)
+{
+    int idx = 0, j, k = 0;
+ 
+    // Iterate String until last
+    // leading space character
+    while (str[idx] == ' ' || str[idx] == '\t' || str[idx] == '\n')
+    {
+        idx++;
+    }
+ 
+    // Run a for loop from index until the original
+    // string ends and copy the content of str to str1
+    for (j = idx; str[j] != '\0'; j++)
+    {
+        str1[k] = str[j];
+        k++;
+    }
+ 
+    // Insert a string terminating character
+    // at the end of new string
+    str1[k] = '\0';
+ 
+}
+
+void removeTrailing(char *str)
+{
+	if((str[strlen(str)-1] == ' ' || str[strlen(str)-1] == '\t' || str[strlen(str)-1] == '\n'))
+    {
+    	str[strlen(str)-1] = '\0';
+    }
+
+}
